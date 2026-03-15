@@ -27,6 +27,11 @@
         .content { padding: 20px; }
         .page { display: none; }
         .page.active { display: block; }
+        .quick-bar { background: white; padding: 20px; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .quick-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+        .quick-item { padding: 16px; border: 1px solid #e8e8e8; border-radius: 8px; text-align: center; cursor: pointer; }
+        .quick-item:hover { border-color: #1890ff; }
+        .quick-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 20px; }
         .metric-card { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .metric-label { font-size: 12px; color: #666; margin-bottom: 8px; }
         .metric-value { font-size: 20px; font-weight: bold; }
@@ -38,6 +43,8 @@
         .data-table th { background: #fafafa; padding: 12px; text-align: left; font-weight: 500; color: #666; border-bottom: 1px solid #f0f0f0; }
         .data-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
         .data-table .num { text-align: right; }
+        .ratio-bar { width: 80px; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; display: inline-block; margin-left: 8px; }
+        .ratio-fill { height: 100%; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -50,20 +57,28 @@
             <div class="submenu-item">交接班</div>
             <div class="submenu-item">营业报表</div>
             <div class="submenu-item">支付对账</div>
+            <div class="submenu-item">其它收支</div>
+            <div class="submenu-item">分账管理</div>
+            <div class="submenu-item">支付管理</div>
         </div>
         <div class="menu-item" onclick="toggleMenu('package-menu', this)"><i class="fas fa-gift"></i>套餐<i class="fas fa-chevron-right menu-arrow"></i></div>
-        <div class="submenu" id="package-menu">
-            <div class="submenu-item">套餐管理</div>
-        </div>
+        <div class="submenu" id="package-menu"><div class="submenu-item">套餐管理</div><div class="submenu-item">套餐销售</div></div>
         <div class="menu-item" onclick="toggleMenu('product-menu', this)"><i class="fas fa-shopping-bag"></i>商品<i class="fas fa-chevron-right menu-arrow"></i></div>
-        <div class="submenu" id="product-menu">
-            <div class="submenu-item">商品列表</div>
-        </div>
+        <div class="submenu" id="product-menu"><div class="submenu-item">商品列表</div><div class="submenu-item">库存管理</div></div>
+        <div class="menu-item" onclick="toggleMenu('marketing-menu', this)"><i class="fas fa-bullhorn"></i>营销<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="marketing-menu"><div class="submenu-item">优惠券</div><div class="submenu-item">活动管理</div></div>
         <div class="menu-item" onclick="toggleMenu('member-menu', this)"><i class="fas fa-user"></i>会员<i class="fas fa-chevron-right menu-arrow"></i></div>
-        <div class="submenu" id="member-menu">
-            <div class="submenu-item">会员档案</div>
-        </div>
-        <div class="menu-item"><i class="fas fa-cog"></i>设置</div>
+        <div class="submenu" id="member-menu"><div class="submenu-item">会员档案</div><div class="submenu-item">积分管理</div></div>
+        <div class="menu-item" onclick="toggleMenu('miniapp-menu', this)"><i class="fas fa-mobile-alt"></i>小程序<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="miniapp-menu"><div class="submenu-item">小程序设置</div><div class="submenu-item">页面装修</div></div>
+        <div class="menu-item" onclick="toggleMenu('report-menu', this)"><i class="fas fa-file-alt"></i>报表<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="report-menu"><div class="submenu-item">营业查询</div><div class="submenu-item">财务报表</div></div>
+        <div class="menu-item" onclick="toggleMenu('device-menu', this)"><i class="fas fa-cog"></i>设备<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="device-menu"><div class="submenu-item">设备监控</div><div class="submenu-item">维护记录</div></div>
+        <div class="menu-item" onclick="toggleMenu('sport-menu', this)"><i class="fas fa-running"></i>运动<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="sport-menu"><div class="submenu-item">运动项目</div><div class="submenu-item">预约管理</div></div>
+        <div class="menu-item" onclick="toggleMenu('settings-menu', this)"><i class="fas fa-cogs"></i>设置<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="settings-menu"><div class="submenu-item">系统设置</div><div class="submenu-item">权限管理</div></div>
     </div>
 
     <div class="main-content">
@@ -72,18 +87,30 @@
                 <button class="date-tab active">今日</button>
                 <button class="date-tab">昨日</button>
                 <button class="date-tab">本周</button>
+                <button class="date-tab">上周</button>
+                <button class="date-tab">本月</button>
+                <button class="date-tab">上月</button>
+                <button class="date-tab">本年</button>
             </div>
-            <div style="display: flex; align-items: center; gap: 16px;">
-                <span style="color: #666; font-size: 14px;">对比：</span>
-                <select style="padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px;">
-                    <option>去年同期</option>
-                    <option>上月同期</option>
-                </select>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="color: #666; font-size: 13px;">对比：</span>
+                <select style="padding: 6px 12px; border: 1px solid #d9d9d9; border-radius: 4px;"><option>去年同期</option><option>上月同期</option></select>
             </div>
         </div>
 
         <div class="content">
             <div class="page active" id="page-dashboard">
+                <div class="quick-bar">
+                    <div class="quick-grid">
+                        <div class="quick-item"><div class="quick-icon" style="background: #e6f7ff; color: #1890ff;"><i class="fas fa-shopping-cart"></i></div><div style="font-size: 13px;">快速收银</div></div>
+                        <div class="quick-item"><div class="quick-icon" style="background: #f6ffed; color: #52c41a;"><i class="fas fa-user-plus"></i></div><div style="font-size: 13px;">快速办卡</div></div>
+                        <div class="quick-item"><div class="quick-icon" style="background: #fff7e6; color: #fa8c16;"><i class="fas fa-tools"></i></div><div style="font-size: 13px;">设备报修</div></div>
+                        <div class="quick-item"><div class="quick-icon" style="background: #fff1f0; color: #f5222d;"><i class="fas fa-gift"></i></div><div style="font-size: 13px;">礼品兑换</div></div>
+                        <div class="quick-item"><div class="quick-icon" style="background: #f9f0ff; color: #722ed1;"><i class="fas fa-file-export"></i></div><div style="font-size: 13px;">数据导出</div></div>
+                        <div class="quick-item"><div class="quick-icon" style="background: #e6fffb; color: #13c2c2;"><i class="fas fa-print"></i></div><div style="font-size: 13px;">打印小票</div></div>
+                    </div>
+                </div>
+
                 <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px;">
                     <div class="metric-card"><div class="metric-label">今日营业额</div><div class="metric-value" style="color: #1890ff;">¥12,580</div></div>
                     <div class="metric-card"><div class="metric-label">今日客流量</div><div class="metric-value" style="color: #52c41a;">358人</div></div>
@@ -91,6 +118,24 @@
                     <div class="metric-card"><div class="metric-label">散客客单价</div><div class="metric-value" style="color: #13c2c2;">¥45.2</div></div>
                     <div class="metric-card"><div class="metric-label">售币单价</div><div class="metric-value" style="color: #722ed1;">¥0.85</div></div>
                     <div class="metric-card"><div class="metric-label">售币数</div><div class="metric-value" style="color: #eb2f96;">15,680币</div></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px;">
+                    <div class="metric-card"><div class="metric-label">存票票数</div><div class="metric-value" style="color: #1890ff;">3,250张</div></div>
+                    <div class="metric-card"><div class="metric-label">回收礼品数</div><div class="metric-value" style="color: #52c41a;">128件</div></div>
+                    <div class="metric-card"><div class="metric-label">新增会员</div><div class="metric-value" style="color: #fa8c16;">28人</div></div>
+                    <div class="metric-card"><div class="metric-label">到店会员</div><div class="metric-value" style="color: #13c2c2;">156人</div></div>
+                    <div class="metric-card"><div class="metric-label">复购会员</div><div class="metric-value" style="color: #722ed1;">89人</div></div>
+                    <div class="metric-card"><div class="metric-label">大项目人数</div><div class="metric-value" style="color: #eb2f96;">268人</div></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px;">
+                    <div class="metric-card"><div class="metric-label">团购核销金额</div><div class="metric-value" style="color: #1890ff;">¥5,680</div></div>
+                    <div class="metric-card"><div class="metric-label">耗币数</div><div class="metric-value" style="color: #52c41a;">12,850币</div></div>
+                    <div class="metric-card"><div class="metric-label">兑奖票数</div><div class="metric-value" style="color: #fa8c16;">2,150张</div></div>
+                    <div class="metric-card"><div class="metric-label">兑换礼品数</div><div class="metric-value" style="color: #13c2c2;">326件</div></div>
+                    <div class="metric-card"><div class="metric-label">设备在线率</div><div class="metric-value" style="color: #722ed1;">92%</div></div>
+                    <div class="metric-card"><div class="metric-label">会员卡余额</div><div class="metric-value" style="color: #eb2f96;">¥156,800</div></div>
                 </div>
 
                 <div class="module">
@@ -104,17 +149,13 @@
                         <table class="data-table">
                             <thead><tr><th>渠道</th><th class="num">金额</th><th class="num">占比</th></tr></thead>
                             <tbody>
-                                <tr><td>线下门店</td><td class="num">¥8,526</td><td class="num">45%</td></tr>
-                                <tr><td>微信小程序</td><td class="num">¥3,794</td><td class="num">20%</td></tr>
-                                <tr><td>美团/大众点评</td><td class="num">¥2,846</td><td class="num">15%</td></tr>
+                                <tr><td><span style="color: #1890ff;">●</span> 线下门店</td><td class="num">¥8,526</td><td class="num">45%<div class="ratio-bar"><div class="ratio-fill" style="width: 45%; background: #1890ff;"></div></div></td></tr>
+                                <tr><td><span style="color: #52c41a;">●</span> 微信小程序</td><td class="num">¥3,794</td><td class="num">20%<div class="ratio-bar"><div class="ratio-fill" style="width: 20%; background: #52c41a;"></div></div></td></tr>
+                                <tr><td><span style="color: #fa8c16;">●</span> 美团/大众点评</td><td class="num">¥2,846</td><td class="num">15%<div class="ratio-bar"><div class="ratio-fill" style="width: 15%; background: #fa8c16;"></div></div></td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-
-            <div class="page" id="page-ticket-sell">
-                <div class="module"><div class="module-header"><div class="module-title">快速售票</div></div><div class="module-body"><p>售票页面...</p></div></div>
             </div>
         </div>
     </div>
