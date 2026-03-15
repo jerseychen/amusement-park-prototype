@@ -9,119 +9,69 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: #f5f7fa; }
-        .sidebar { width: 260px; background: #001529; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; overflow-y: auto; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif; background: #f0f2f5; }
+        .sidebar { width: 220px; background: #001529; min-height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; }
         .logo { padding: 16px; text-align: center; color: white; font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .menu-item { padding: 0 16px; height: 40px; display: flex; align-items: center; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.3s; font-size: 14px; }
+        .menu-item { padding: 0 16px; height: 40px; display: flex; align-items: center; color: rgba(255,255,255,0.65); cursor: pointer; font-size: 14px; }
         .menu-item:hover, .menu-item.active { color: #fff; background: #1890ff; }
         .menu-item i { width: 20px; margin-right: 10px; }
-        .menu-arrow { margin-left: auto; font-size: 12px; }
+        .menu-arrow { margin-left: auto; font-size: 10px; }
         .submenu { background: #000c17; display: none; }
         .submenu.open { display: block; }
         .submenu-item { padding: 0 16px 0 46px; height: 36px; display: flex; align-items: center; color: rgba(255,255,255,0.65); cursor: pointer; font-size: 13px; }
-        .submenu-item:hover, .submenu-item.active { color: #fff; background: rgba(24,144,255,0.3); }
-        .store-section { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .store-title { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
-        .tree-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; margin-bottom: 4px; color: rgba(255,255,255,0.85); font-size: 13px; }
-        .tree-item:hover, .tree-item.active { background: #1890ff; color: white; }
-        .tree-children { padding-left: 20px; display: none; }
-        .tree-children.open { display: block; }
-        .tree-child { padding: 6px 12px; cursor: pointer; border-radius: 4px; font-size: 12px; color: rgba(255,255,255,0.65); }
-        .tree-child:hover, .tree-child.active { color: white; background: rgba(24,144,255,0.3); }
-        .main-content { margin-left: 260px; min-height: 100vh; }
+        .submenu-item:hover { color: #fff; background: rgba(24,144,255,0.3); }
+        .main-content { margin-left: 220px; min-height: 100vh; }
         .header { background: white; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 4px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 99; }
-        .date-btn { padding: 6px 16px; border: 1px solid #d9d9d9; background: white; border-radius: 4px; cursor: pointer; font-size: 14px; }
-        .date-btn.active { background: #1890ff; color: white; border-color: #1890ff; }
-        .content { padding: 20px 24px; }
+        .date-tab { padding: 6px 16px; border: 1px solid #d9d9d9; background: white; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        .date-tab.active { background: #1890ff; color: white; border-color: #1890ff; }
+        .content { padding: 20px; }
         .page { display: none; }
         .page.active { display: block; }
-        .metrics-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; margin-bottom: 20px; }
         .metric-card { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
         .metric-label { font-size: 12px; color: #666; margin-bottom: 8px; }
         .metric-value { font-size: 20px; font-weight: bold; }
-        .metric-compare { font-size: 11px; margin-top: 4px; }
-        .metric-compare.up { color: #52c41a; }
-        .module { background: white; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .module-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
-        .module-icon { width: 4px; height: 16px; background: #1890ff; border-radius: 2px; }
-        .module-title { font-size: 16px; font-weight: 600; color: #333; }
+        .module { background: white; border-radius: 8px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .module-header { padding: 16px 20px; border-bottom: 1px solid #f0f0f0; }
+        .module-title { font-size: 15px; font-weight: 600; }
         .module-body { padding: 20px; }
         .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .data-table th { background: #fafafa; padding: 12px; text-align: left; font-weight: 500; color: #666; border-bottom: 1px solid #f0f0f0; }
         .data-table td { padding: 12px; border-bottom: 1px solid #f0f0f0; }
-        .data-table .num { text-align: right; font-family: monospace; }
-        .data-table .highlight { color: #1890ff; font-weight: 500; }
-        .chart-box { background: #fafafa; border-radius: 6px; padding: 16px; }
-        .chart-title { font-size: 14px; font-weight: 500; margin-bottom: 12px; color: #333; }
-        .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-        .quick-item { padding: 20px; border: 1px solid #e8e8e8; border-radius: 8px; text-align: center; cursor: pointer; }
-        .quick-item:hover { border-color: #1890ff; }
-        .quick-item i { font-size: 28px; color: #1890ff; margin-bottom: 8px; }
+        .data-table .num { text-align: right; }
     </style>
 </head>
 <body>
     <div class="sidebar">
         <div class="logo">游乐场管理系统</div>
-        
-        <div class="menu-item active" onclick="showPage('dashboard')"><i class="fas fa-tachometer-alt"></i>工作台</div>
-        
-        <div class="menu-item" onclick="toggleMenu('ticket-menu', this)"><i class="fas fa-ticket-alt"></i>票务管理<i class="fas fa-chevron-right menu-arrow"></i></div>
-        <div class="submenu" id="ticket-menu">
-            <div class="submenu-item" onclick="showPage('ticket-sell')">快速售票</div>
-            <div class="submenu-item" onclick="showPage('ticket-query')">票务查询</div>
-            <div class="submenu-item" onclick="showPage('ticket-refund')">退票处理</div>
-            <div class="submenu-item" onclick="showPage('ticket-stats')">票务统计</div>
+        <div class="menu-item active" onclick="showPage('dashboard')"><i class="fas fa-home"></i>首页报表</div>
+        <div class="menu-item" onclick="toggleMenu('business-menu', this)"><i class="fas fa-chart-line"></i>营业<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="business-menu">
+            <div class="submenu-item">门店结账</div>
+            <div class="submenu-item">交接班</div>
+            <div class="submenu-item">营业报表</div>
+            <div class="submenu-item">支付对账</div>
         </div>
-        
-        <div class="menu-item" onclick="toggleMenu('member-menu', this)"><i class="fas fa-user"></i>会员管理<i class="fas fa-chevron-right menu-arrow"></i></div>
-        <div class="submenu" id="member-menu">
-            <div class="submenu-item" onclick="showPage('member-list')">会员档案</div>
-            <div class="submenu-item" onclick="showPage('member-points')">积分管理</div>
-            <div class="submenu-item" onclick="showPage('member-marketing')">会员营销</div>
+        <div class="menu-item" onclick="toggleMenu('package-menu', this)"><i class="fas fa-gift"></i>套餐<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="package-menu">
+            <div class="submenu-item">套餐管理</div>
         </div>
-        
-        <div class="menu-item" onclick="toggleMenu('product-menu', this)"><i class="fas fa-shopping-bag"></i>商品管理<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="menu-item" onclick="toggleMenu('product-menu', this)"><i class="fas fa-shopping-bag"></i>商品<i class="fas fa-chevron-right menu-arrow"></i></div>
         <div class="submenu" id="product-menu">
-            <div class="submenu-item" onclick="showPage('product-list')">商品列表</div>
-            <div class="submenu-item" onclick="showPage('product-inventory')">库存管理</div>
-            <div class="submenu-item" onclick="showPage('product-sales')">销售统计</div>
+            <div class="submenu-item">商品列表</div>
         </div>
-        
-        <div class="menu-item" onclick="toggleMenu('device-menu', this)"><i class="fas fa-desktop"></i>设备管理<i class="fas fa-chevron-right menu-arrow"></i></div>
-        <div class="submenu" id="device-menu">
-            <div class="submenu-item" onclick="showPage('device-monitor')">设备监控</div>
-            <div class="submenu-item" onclick="showPage('device-maintenance')">维护记录</div>
-            <div class="submenu-item" onclick="showPage('device-alarm')">报警管理</div>
+        <div class="menu-item" onclick="toggleMenu('member-menu', this)"><i class="fas fa-user"></i>会员<i class="fas fa-chevron-right menu-arrow"></i></div>
+        <div class="submenu" id="member-menu">
+            <div class="submenu-item">会员档案</div>
         </div>
-        
-        <div class="menu-item" onclick="toggleMenu('finance-menu', this)"><i class="fas fa-chart-line"></i>财务管理<i class="fas fa-chevron-right menu-arrow"></i></div>
-        <div class="submenu" id="finance-menu">
-            <div class="submenu-item" onclick="showPage('finance-income')">日常收支</div>
-            <div class="submenu-item" onclick="showPage('finance-reports')">财务报表</div>
-            <div class="submenu-item" onclick="showPage('finance-invoice')">发票管理</div>
-        </div>
-        
-        <div class="menu-item" onclick="showPage('settings')"><i class="fas fa-cog"></i>系统设置</div>
-        
-        <div class="store-section">
-            <div class="store-title">选择门店</div>
-            <div class="tree-item active" onclick="selectStore(this)"><i class="fas fa-building"></i>全部门店</div>
-            <div class="tree-item" onclick="toggleTree(this)"><i class="fas fa-chevron-right"></i>华南区域</div>
-            <div class="tree-children">
-                <div class="tree-child" onclick="selectStore(this)">广州店</div>
-                <div class="tree-child" onclick="selectStore(this)">深圳店</div>
-                <div class="tree-child" onclick="selectStore(this)">珠海店</div>
-            </div>
-        </div>
+        <div class="menu-item"><i class="fas fa-cog"></i>设置</div>
     </div>
 
     <div class="main-content">
         <div class="header">
             <div style="display: flex; gap: 8px;">
-                <button class="date-btn active">今日</button>
-                <button class="date-btn">昨日</button>
-                <button class="date-btn">本周</button>
-                <button class="date-btn">本月</button>
+                <button class="date-tab active">今日</button>
+                <button class="date-tab">昨日</button>
+                <button class="date-tab">本周</button>
             </div>
             <div style="display: flex; align-items: center; gap: 16px;">
                 <span style="color: #666; font-size: 14px;">对比：</span>
@@ -129,91 +79,42 @@
                     <option>去年同期</option>
                     <option>上月同期</option>
                 </select>
-                <div style="width: 32px; height: 32px; border-radius: 50%; background: #1890ff; color: white; display: flex; align-items: center; justify-content: center;">管</div>
             </div>
         </div>
 
         <div class="content">
             <div class="page active" id="page-dashboard">
-                <div class="metrics-row">
-                    <div class="metric-card"><div class="metric-label">营业额</div><div class="metric-value" style="color: #1890ff;">¥8,888</div><div class="metric-compare up">+10%</div></div>
-                    <div class="metric-card"><div class="metric-label">会员客单价</div><div class="metric-value">¥88</div><div class="metric-compare up">+5%</div></div>
-                    <div class="metric-card"><div class="metric-label">售币数</div><div class="metric-value">12,580</div><div class="metric-compare up">+15%</div></div>
-                    <div class="metric-card"><div class="metric-label">耗币数</div><div class="metric-value">9,860</div><div class="metric-compare up">+12%</div></div>
-                    <div class="metric-card"><div class="metric-label">新增会员</div><div class="metric-value">156</div><div class="metric-compare up">+23%</div></div>
-                    <div class="metric-card"><div class="metric-label">到店会员</div><div class="metric-value">892</div><div class="metric-compare up">+18%</div></div>
-                    <div class="metric-card"><div class="metric-label">复购会员</div><div class="metric-value">423</div><div class="metric-compare up">+8%</div></div>
-                    <div class="metric-card"><div class="metric-label">免费币</div><div class="metric-value" style="color: #722ed1;">5,450</div><div class="metric-compare up">18.5%</div></div>
+                <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 16px;">
+                    <div class="metric-card"><div class="metric-label">今日营业额</div><div class="metric-value" style="color: #1890ff;">¥12,580</div></div>
+                    <div class="metric-card"><div class="metric-label">今日客流量</div><div class="metric-value" style="color: #52c41a;">358人</div></div>
+                    <div class="metric-card"><div class="metric-label">会员客单价</div><div class="metric-value" style="color: #fa8c16;">¥68.5</div></div>
+                    <div class="metric-card"><div class="metric-label">散客客单价</div><div class="metric-value" style="color: #13c2c2;">¥45.2</div></div>
+                    <div class="metric-card"><div class="metric-label">售币单价</div><div class="metric-value" style="color: #722ed1;">¥0.85</div></div>
+                    <div class="metric-card"><div class="metric-label">售币数</div><div class="metric-value" style="color: #eb2f96;">15,680币</div></div>
                 </div>
 
                 <div class="module">
-                    <div class="module-header"><div class="module-icon"></div><div class="module-title">免费币核查</div></div>
-                    <div class="module-body">
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-                            <div style="text-align: center; padding: 20px; background: #f6ffed; border-radius: 8px;">
-                                <div style="font-size: 13px; color: #666;">0元补币套餐</div>
-                                <div style="font-size: 28px; font-weight: bold; color: #52c41a; margin: 12px 0;">1,250</div>
-                            </div>
-                            <div style="text-align: center; padding: 20px; background: #fff7e6; border-radius: 8px;">
-                                <div style="font-size: 13px; color: #666;">活动币套餐</div>
-                                <div style="font-size: 28px; font-weight: bold; color: #fa8c16; margin: 12px 0;">3,680</div>
-                            </div>
-                            <div style="text-align: center; padding: 20px; background: #e6f7ff; border-radius: 8px;">
-                                <div style="font-size: 13px; color: #666;">赠送币</div>
-                                <div style="font-size: 28px; font-weight: bold; color: #1890ff; margin: 12px 0;">520</div>
-                            </div>
-                            <div style="text-align: center; padding: 20px; background: #f9f0ff; border-radius: 8px;">
-                                <div style="font-size: 13px; color: #666;">免费币占比</div>
-                                <div style="font-size: 28px; font-weight: bold; color: #722ed1; margin: 12px 0;">18.5%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="module">
-                    <div class="module-header"><div class="module-icon"></div><div class="module-title">营收趋势</div></div>
+                    <div class="module-header"><div class="module-title">营收趋势</div></div>
                     <div class="module-body"><canvas id="revenueChart" height="100"></canvas></div>
                 </div>
 
                 <div class="module">
-                    <div class="module-header"><div class="module-icon"></div><div class="module-title">营业额分析</div></div>
+                    <div class="module-header"><div class="module-title">渠道占比</div></div>
                     <div class="module-body">
                         <table class="data-table">
                             <thead><tr><th>渠道</th><th class="num">金额</th><th class="num">占比</th></tr></thead>
                             <tbody>
-                                <tr><td>门店</td><td class="num highlight">¥150,000</td><td class="num">30%</td></tr>
-                                <tr><td>微信小程序</td><td class="num highlight">¥100,000</td><td class="num">20%</td></tr>
-                                <tr><td>美团/大众点评</td><td class="num highlight">¥100,000</td><td class="num">20%</td></tr>
+                                <tr><td>线下门店</td><td class="num">¥8,526</td><td class="num">45%</td></tr>
+                                <tr><td>微信小程序</td><td class="num">¥3,794</td><td class="num">20%</td></tr>
+                                <tr><td>美团/大众点评</td><td class="num">¥2,846</td><td class="num">15%</td></tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                <div class="module">
-                    <div class="module-header"><div class="module-icon"></div><div class="module-title">快捷入口</div></div>
-                    <div class="module-body">
-                        <div class="quick-grid">
-                            <div class="quick-item" onclick="showPage('ticket-sell')"><i class="fas fa-ticket-alt"></i><div>快速售票</div></div>
-                            <div class="quick-item" onclick="showPage('member-list')"><i class="fas fa-user-plus"></i><div>会员办卡</div></div>
-                            <div class="quick-item" onclick="showPage('product-list')"><i class="fas fa-box"></i><div>商品上架</div></div>
-                            <div class="quick-item" onclick="showPage('device-alarm')"><i class="fas fa-tools"></i><div>设备报修</div></div>
-                        </div>
                     </div>
                 </div>
             </div>
 
             <div class="page" id="page-ticket-sell">
-                <div style="background: white; padding: 24px; border-radius: 8px;">
-                    <h2>快速售票</h2>
-                    <p>售票功能页面...</p>
-                </div>
-            </div>
-
-            <div class="page" id="page-member-list">
-                <div style="background: white; padding: 24px; border-radius: 8px;">
-                    <h2>会员档案</h2>
-                    <p>会员管理页面...</p>
-                </div>
+                <div class="module"><div class="module-header"><div class="module-title">快速售票</div></div><div class="module-body"><p>售票页面...</p></div></div>
             </div>
         </div>
     </div>
@@ -222,43 +123,19 @@
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + page).classList.add('active');
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-            event.target.closest('.menu-item')?.classList.add('active');
         }
-        
         function toggleMenu(id, el) {
-            const menu = document.getElementById(id);
-            const arrow = el.querySelector('.menu-arrow');
-            menu.classList.toggle('open');
-            arrow.style.transform = menu.classList.contains('open') ? 'rotate(90deg)' : '';
+            document.getElementById(id).classList.toggle('open');
+            el.querySelector('.menu-arrow').style.transform = document.getElementById(id).classList.contains('open') ? 'rotate(90deg)' : '';
         }
-        
-        function toggleTree(el) {
-            const children = el.nextElementSibling;
-            const icon = el.querySelector('i');
-            children.classList.toggle('open');
-            icon.className = children.classList.contains('open') ? 'fas fa-chevron-down' : 'fas fa-chevron-right';
-        }
-        
-        function selectStore(el) {
-            document.querySelectorAll('.tree-item, .tree-child').forEach(t => t.classList.remove('active'));
-            el.classList.add('active');
-        }
-
         new Chart(document.getElementById('revenueChart'), {
             type: 'line',
             data: {
                 labels: ['00', '04', '08', '12', '16', '20'],
                 datasets: [{
-                    label: '今日营收',
-                    data: [1200, 800, 3500, 5800, 7200, 8888],
+                    label: '今日',
+                    data: [800, 600, 2500, 5800, 9200, 12580],
                     borderColor: '#1890ff',
-                    tension: 0.4
-                }, {
-                    label: '对比期',
-                    data: [1000, 900, 3200, 5200, 6500, 7500],
-                    borderColor: '#999',
-                    borderDash: [5, 5],
                     tension: 0.4
                 }]
             },
